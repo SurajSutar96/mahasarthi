@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="mr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MahaSarthi – महाराष्ट्र शासन योजना एकाच ठिकाणी</title>
+    <meta
+      name="description"
+      content="महाराष्ट्र सरकारच्या सर्व योजना, अनुदान, नोकऱ्या आणि गाव निधी एकाच ठिकाणी. MahaSarthi Portal."
+    />
+    <link rel="stylesheet" href="/static/style.css" />
+    <link rel="manifest" href="/static/manifest.json" />
+  </head>
+  <body>
+    <!-- ── Offline Banner ──────────────────────────────────────────────── -->
+    <div class="offline-banner" id="offlineBanner">
+      📵 आपण ऑफलाइन आहात – कॅश केलेला डेटा दाखवत आहे
+    </div>
+
+    <!-- ── Navbar ──────────────────────────────────────────────────────── -->
+    <nav class="navbar">
+      <div class="nav-logo">
+        <div class="logo-icon">🌿</div>
+        <span class="logo-text">Maha<span>Sarthi</span></span>
+        <span class="tenant-badge" id="tenantBadge">General</span>
+      </div>
+
+      <div class="nav-search">
+        <span class="search-icon">🔍</span>
+        <input
+          type="search"
+          id="globalSearch"
+          placeholder="योजना शोधा... (Search schemes)"
+          autocomplete="off"
+          aria-label="Search government schemes"
+        />
+        <span
+          class="search-clear"
+          id="searchClear"
+          onclick="clearSearch()"
+          title="Clear"
+          >✕</span
+        >
+      </div>
+
+      <div class="nav-actions">
+        <div class="lang-toggle" role="group" aria-label="Language selector">
+          <button
+            class="lang-btn active"
+            id="btnMr"
+            onclick="setLanguage('mr')"
+            aria-label="Marathi"
+          >
+            मराठी
+          </button>
+          <button
+            class="lang-btn"
+            id="btnEn"
+            onclick="setLanguage('en')"
+            aria-label="English"
+          >
+            EN
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ── Hero ───────────────────────────────────────────────────────── -->
+    <section class="hero">
+      <div class="hero-content">
+        <h1 class="hero-title" id="heroTitle">
+          महाराष्ट्र शासन योजना एकाच ठिकाणी
+        </h1>
+        <p class="hero-subtitle" id="heroSubtitle">
+          सर्व सरकारी योजना, अनुदान आणि नोकरी माहिती
+        </p>
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <div class="stat-num">18+</div>
+            <div class="stat-label" id="statSchemes">योजना</div>
+          </div>
+          <div class="hero-stat">
+            <div class="stat-num">8</div>
+            <div class="stat-label" id="statCategories">श्रेणी</div>
+          </div>
+          <div class="hero-stat">
+            <div class="stat-num">36</div>
+            <div class="stat-label" id="statDistricts">जिल्हे</div>
+          </div>
+          <div class="hero-stat">
+            <div class="stat-num">24/7</div>
+            <div class="stat-label" id="statAI">AI सहाय्य</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Category Tabs ──────────────────────────────────────────────── -->
+    <div class="categories" id="categoryTabs" role="tablist">
+      <button
+        class="cat-tab active"
+        data-category="all"
+        role="tab"
+        aria-selected="true"
+        onclick="setCategory(this, 'all')"
+      >
+        <span class="tab-icon">🏛️</span>
+        <span class="tab-label" data-mr="सर्व" data-en="All">सर्व</span>
+      </button>
+      <button
+        class="cat-tab"
+        data-category="farmer"
+        role="tab"
+        onclick="setCategory(this, 'farmer')"
+      >
+        <span class="tab-icon">🌾</span>
+        <span class="tab-label" data-mr="शेतकरी" data-en="Farmers">शेतकरी</span>
+      </button>
+      <button
+        class="cat-tab"
+        data-category="student"
+        role="tab"
+        onclick="setCategory(this, 'student')"
+      >
+        <span class="tab-icon">📚</span>
+        <span class="tab-label" data-mr="विद्यार्थी" data-en="Students"
+          >विद्यार्थी</span
+        >
+      </button>
+      <button
+        class="cat-tab"
+        data-category="job"
+        role="tab"
+        onclick="setCategory(this, 'job')"
+      >
+        <span class="tab-icon">💼</span>
+        <span class="tab-label" data-mr="नोकऱ्या" data-en="Jobs">नोकऱ्या</span>
+      </button>
+      <button
+        class="cat-tab"
+        data-category="village"
+        role="tab"
+        onclick="setCategory(this, 'village')"
+      >
+        <span class="tab-icon">🏘️</span>
+        <span class="tab-label" data-mr="गाव निधी" data-en="Village Funds"
+          >गाव निधी</span
+        >
+      </button>
+      <button
+        class="cat-tab"
+        data-category="general"
+        role="tab"
+        onclick="setCategory(this, 'general')"
+      >
+        <span class="tab-icon">✨</span>
+        <span class="tab-label" data-mr="सामान्य" data-en="General"
+          >सामान्य</span
+        >
+      </button>
+    </div>
+
+    <!-- ── Search Results Panel ───────────────────────────────────────── -->
+    <div class="main-container">
+      <div class="search-results-panel" id="searchPanel">
+        <div class="section-header">
+          <h2 class="section-title">
+            🔎 <span id="searchResultsTitle">शोध निकाल</span>
+          </h2>
+          <button
+            class="btn btn-outline"
+            onclick="closeSearch()"
+            style="padding: 6px 14px; font-size: 0.78rem"
+          >
+            बंद करा ✕
+          </button>
+        </div>
+        <div id="searchResultsList"></div>
+      </div>
+
+      <!-- ── AI Eligibility Checker ────────────────────────────────────── -->
+      <section class="eligibility-section" id="eligibilitySection">
+        <h2>
+          🤖
+          <span data-mr="AI पात्रता तपासणी" data-en="AI Eligibility Checker"
+            >AI पात्रता तपासणी</span
+          >
+        </h2>
+        <div class="eligibility-form">
+          <div class="form-group">
+            <label for="eRole" data-mr="तुमचा प्रकार" data-en="Your Role"
+              >तुमचा प्रकार</label
+            >
+            <select class="form-select" id="eRole">
+              <option value="farmer">🌾 शेतकरी / Farmer</option>
+              <option value="student">📚 विद्यार्थी / Student</option>
+              <option value="jobseeker">💼 नोकरी शोधणारा / Jobseeker</option>
+              <option value="general">🏛️ सामान्य / General</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label
+              for="eIncome"
+              data-mr="वार्षिक उत्पन्न"
+              data-en="Annual Income"
+              >वार्षिक उत्पन्न</label
+            >
+            <select class="form-select" id="eIncome">
+              <option value="0-1L">₹0 – ₹1 लाख</option>
+              <option value="1L-3L">₹1 – ₹3 लाख</option>
+              <option value="3L-5L">₹3 – ₹5 लाख</option>
+              <option value="5L+">₹5 लाखापेक्षा जास्त</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="eDistrict" data-mr="जिल्हा" data-en="District"
+              >जिल्हा</label
+            >
+            <input
+              class="form-input"
+              id="eDistrict"
+              type="text"
+              placeholder="उदा. पुणे, नाशिक..."
+            />
+          </div>
+          <div class="form-group" style="justify-content: flex-end">
+            <button
+              class="btn btn-primary"
+              id="eligibilityBtn"
+              onclick="checkEligibility()"
+              style="height: 40px"
+            >
+              🤖
+              <span data-mr="पात्रता तपासा" data-en="Check Eligibility"
+                >पात्रता तपासा</span
+              >
+            </button>
+          </div>
+        </div>
+        <div class="eligibility-result" id="eligibilityResult"></div>
+      </section>
+
+      <!-- ── Scheme Comparison Tool ─────────────────────────────────────── -->
+      <section class="compare-section" id="compareSection">
+        <h2>
+          ⚖️
+          <span data-mr="योजना तुलना" data-en="Scheme Comparison"
+            >योजना तुलना</span
+          >
+        </h2>
+        <div class="compare-selects">
+          <select
+            class="form-select"
+            id="compareA"
+            onchange="renderComparison()"
+          >
+            <option value="">-- पहिली योजना निवडा --</option>
+          </select>
+          <div class="compare-vs">VS</div>
+          <select
+            class="form-select"
+            id="compareB"
+            onchange="renderComparison()"
+          >
+            <option value="">-- दुसरी योजना निवडा --</option>
+          </select>
+        </div>
+        <table class="compare-table" id="compareTable">
+          <thead>
+            <tr>
+              <th>वैशिष्ट्य</th>
+              <th id="compareAHeader">योजना A</th>
+              <th id="compareBHeader">योजना B</th>
+            </tr>
+          </thead>
+          <tbody id="compareBody"></tbody>
+        </table>
+      </section>
+
+      <!-- ── Village Fund Lookup ────────────────────────────────────────── -->
+      <section id="villageFundSection" class="hidden">
+        <div class="section-header">
+          <h2 class="section-title">
+            🏘️
+            <span data-mr="गाव निधी माहिती" data-en="Village Fund Info"
+              >गाव निधी माहिती</span
+            >
+          </h2>
+        </div>
+        <div class="village-search">
+          <input
+            class="village-input"
+            id="villageInput"
+            type="text"
+            placeholder="गावाचे नाव टाका (e.g. Nashik, Pune)..."
+          />
+          <button
+            class="btn btn-primary"
+            id="villageSearchBtn"
+            onclick="fetchVillageFunds()"
+          >
+            शोधा
+          </button>
+        </div>
+        <div id="villageResult"></div>
+      </section>
+
+      <!-- ── Jobs Section ───────────────────────────────────────────────── -->
+      <section id="jobsSection" class="hidden">
+        <div class="section-header">
+          <h2 class="section-title">
+            💼
+            <span data-mr="सरकारी नोकऱ्या" data-en="Government Jobs"
+              >सरकारी नोकऱ्या</span
+            >
+          </h2>
+          <span class="section-count" id="jobsCount">लोड होत आहे...</span>
+        </div>
+        <div id="jobsList"></div>
+      </section>
+
+      <!-- ── Schemes Section ───────────────────────────────────────────── -->
+      <section id="schemesSection">
+        <div class="section-header">
+          <h2 class="section-title">
+            🏛️
+            <span
+              id="schemesSectionTitle"
+              data-mr="सर्व योजना"
+              data-en="All Schemes"
+              >सर्व योजना</span
+            >
+          </h2>
+          <span class="section-count" id="schemesCount">लोड होत आहे...</span>
+        </div>
+        <div class="cards-grid" id="schemesGrid">
+          <!-- Skeleton cards -->
+          ${Array(6).fill(0).map(() => `
+          <div class="skeleton-card">
+            <div class="skeleton sk-badge"></div>
+            <div class="skeleton sk-title"></div>
+            <div class="skeleton sk-title-2"></div>
+            <div class="skeleton sk-desc"></div>
+            <div class="skeleton sk-desc-2"></div>
+            <div class="skeleton sk-box"></div>
+            <div class="skeleton sk-btns"></div>
+          </div>
+          `).join('')}
+        </div>
+      </section>
+    </div>
+
+    <!-- ── Footer ─────────────────────────────────────────────────────── -->
+    <footer class="footer">
+      <p>
+        © 2024 MahaSarthi Portal &nbsp;|&nbsp; महाराष्ट्र शासनाच्या अधिकृत
+        माहितीवर आधारित &nbsp;|&nbsp; Built with ❤️ for Maharashtra Citizens
+        &nbsp;|&nbsp; <a href="/api/docs" target="_blank">API Docs</a>
+      </p>
+    </footer>
+
+    <!-- ── Floating Chat Bubble ───────────────────────────────────────── -->
+    <button
+      class="chat-bubble"
+      id="chatBubble"
+      onclick="toggleChat()"
+      aria-label="Open AI Chat"
+    >
+      <span class="bubble-icon">🤖</span>
+      <span class="chat-badge" id="chatBadge">1</span>
+    </button>
+
+    <!-- ── Chat Drawer ────────────────────────────────────────────────── -->
+    <div
+      class="chat-drawer"
+      id="chatDrawer"
+      role="dialog"
+      aria-label="AI Chatbot"
+    >
+      <div class="chat-header">
+        <div class="chat-avatar">🤖</div>
+        <div class="chat-header-info">
+          <div class="chat-header-title">MahaSarthi AI</div>
+          <div class="chat-header-sub">
+            <span class="chat-online"></span> Online · Powered by Groq + Tavily
+          </div>
+        </div>
+        <button
+          class="chat-close"
+          onclick="toggleChat()"
+          aria-label="Close chat"
+        >
+          ✕
+        </button>
+      </div>
+
+      <div class="chat-lang-bar">
+        <span>भाषा:</span>
+        <select id="chatLang" onchange="setChatLang(this.value)">
+          <option value="mr">मराठी</option>
+          <option value="en">English</option>
+        </select>
+        <span style="margin-left: auto; font-size: 0.7rem; opacity: 0.7"
+          >Rate limited: 10 msg/min</span
+        >
+      </div>
+
+      <div class="chat-messages" id="chatMessages">
+        <!-- Welcome message injected by JS -->
+      </div>
+
+      <div class="chat-input-area">
+        <textarea
+          class="chat-input"
+          id="chatInput"
+          rows="1"
+          placeholder="योजनेबद्दल विचारा... (Ask about schemes)"
+          aria-label="Chat message"
+        ></textarea>
+        <button
+          class="chat-send"
+          id="chatSendBtn"
+          onclick="sendChat()"
+          aria-label="Send message"
+        >
+          ➤
+        </button>
+      </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>
